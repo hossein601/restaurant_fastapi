@@ -24,9 +24,6 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(token_auth_sc
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-        if user.role != role:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Role mismatch")
-
         return user
 
     except ExpiredSignatureError:
@@ -40,8 +37,8 @@ def role_checker(required_role:list):
         if current_user.role not in required_role:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Access denie "
+                detail=f"Access denied "
             )
         return current_user
-    return checker
 
+    return checker

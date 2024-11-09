@@ -7,11 +7,6 @@ class OrderItemCreate(BaseModel):
     quantity: int
 
 class OrderCreate(BaseModel):
-    customer_name: str
-    phone_number: str
-    total_price: Optional[int] = 0
-    user_id: int
-    staff_id: Optional[int]
     items: List[OrderItemCreate]
 
 class OrderItemResponse(BaseModel):
@@ -20,8 +15,9 @@ class OrderItemResponse(BaseModel):
 
 class OrderResponse(BaseModel):
     id: int
-    customer_name: str
-    phone_number: str
+    staff_id :int
+    items: List[OrderItemCreate]
+
     total_price: Optional[int]
     items: List[OrderItemResponse]
 

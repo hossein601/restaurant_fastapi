@@ -37,6 +37,7 @@ def update_item(item_id: int, item_data: ItemUpdate, db: Session = Depends(get_d
         setattr(item, key, item_data_dict[key])
 
     db.commit()
+
     return item
 
 
@@ -46,5 +47,7 @@ def delete_item(item_id: int, db: Session = Depends(get_db), current_user: User 
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
     db.delete(item)
+
     db.commit()
+
     return {"success": True}

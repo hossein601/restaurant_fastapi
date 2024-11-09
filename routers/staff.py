@@ -24,7 +24,6 @@ def create_staff(staff_data: StaffCreate, db: Session = Depends(get_db)):
 @staff_router.get("/staff", response_model=List[StaffResponse], status_code=status.HTTP_200_OK,
                   dependencies=[Depends(role_checker(["admin"]))])
 def get_staff(db: Session = Depends(get_db)):
-
     staff = db.query(Staff).all()
     return staff
 
@@ -40,7 +39,6 @@ def update_staff(staff_id: int, staff_update: StaffUpdate, db: Session = Depends
 
     staff_data = staff_update.dict(exclude_unset=True)
     db.query(Staff).filter(Staff.id == staff_id).update(staff_data)
-
     db.commit()
 
     db.refresh(staff)

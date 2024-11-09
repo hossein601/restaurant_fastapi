@@ -12,7 +12,7 @@ import bcrypt
 
 user_router = APIRouter()
 
-@user_router.get("/users_profile", response_model=UserInformation, dependencies=[Depends(role_checker(["user", "admin"]))])
+@user_router.get("/users/users_profile", response_model=UserInformation, dependencies=[Depends(role_checker(["user", "admin"]))])
 def get_users_profile(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user_info = db.query(User).filter(User.id == current_user.id).one_or_none()
     if user_info is None:
@@ -51,39 +51,20 @@ def delete_user(db: Session = Depends(get_db), current_user: User = Depends(get_
     if delete_user:
         db.delete(delete_user)
         db.commit()
+
         return {"success": True}
 
     raise HTTPException(status_code=404, detail="User not found")
 
-@user_router.put("/users/create_admin", status_code=status.HTTP_200_OK,)
-def create_admin(role: CreateUserRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    if role.role not in ["user", "admin"]:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input")
+@user_router.put("/users/create_admin", status_code=status.HTTP_200_OK)
+def create_admin(user: CreateUserRequest, db: Session = Depends(get_db), current_user= Depends(get_current_user)):
+    current_user.role = user.role
 
-    current_user.role = role.role
     db.commit()
-
     db.refresh(current_user)
 
     return {"success": True}
 
 
 
-def authenticate_admin(username: str, password: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.name == username).first()
 
-    if user is None or not user.verify_password(password) or user.role != Role.admin:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password, or insufficient permissions",
-        )
-
-    return user
-from fastapi import FastAPI, Depends
-
-app = FastAPI()
-
-@app.post("/admin-login")
-def admin_login(username: str, password: str, user: User = Depends(authenticate_admin)):
-    # At this point, `user` is a verified admin
-    return {"message": f"Welcome, Admin {user.name}!"}

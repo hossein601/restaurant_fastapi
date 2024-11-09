@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from database.base import Base
 from models.time_record import TimeRecord
 
+
 class OrderItem(TimeRecord, Base):
     __tablename__ = 'order_items'
 

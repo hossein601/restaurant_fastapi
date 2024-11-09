@@ -12,7 +12,7 @@ auth_router = APIRouter()
 def create_user(user: UserSignin, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.phone_number == user.phone_number).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="Phone number already registered")
+        raise HTTPException(status_code=400, detail="Phone Number already exists")
 
     hashed_password = bcrypt.hash(user.password)
     new_user = User(phone_number=user.phone_number, hashed_password=hashed_password)
@@ -25,9 +25,9 @@ def create_user(user: UserSignin, db: Session = Depends(get_db)):
     return {"message": "User created successfully"}
 
 @auth_router.post("/auth/login")
-def login(user_cred: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.phone_number == user_cred.phone_number).first()
-    if not user or not user.verify_password(user_cred.password):
+def login(user_log: UserLogin, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.phone_number == user_log.phone_number).first()
+    if not user or not user.verify_password(user_log.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
     access_token = create_access_token(data={"sub": str(user.id)}, role=user.role)

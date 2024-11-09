@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 import jwt
-from jwt import ExpiredSignatureError,PyJWTError
-from fastapi import status
+from jwt import ExpiredSignatureError, PyJWTError
 from config import setting
 
 

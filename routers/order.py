@@ -19,20 +19,12 @@ def assign_staff(db: Session) -> Staff:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No staff member available")
     return staff
 
-@order_router.post("/v1/order", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
-def create_order(order_data: OrderCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    assigned_staff = assign_staff(db)
+@order_router.post("/order/create_order",  status_code=status.HTTP_201_CREATED,dependencies=[Depends(role_checker(["user", "admin"]))])
+def creat_order(order_data: OrderCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    staff = assign_staff(db)
 
-    if not current_user.name:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User should have name . update profile.")
-
-    order = Order(
-        customer_name=current_user.name,
-        phone_number=current_user.phone_number,
-        user=current_user,
-        staff=assigned_staff
-    )
-    db.add(order)
+    if not current_user.address:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User should have address.")
 
     total_price = 0
 
@@ -43,17 +35,16 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db), current
         if item.stock < item_data.quantity:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Insufficient stock for '{item_data.item_name}'")
 
-        order_item = OrderItem(order=order, item=item, quantity=item_data.quantity)
-        db.add(order_item)
-        item.stock -= item_data.quantity
         total_price += item.price * item_data.quantity
-
-    order.total_price = total_price
+    new_order = Order(customer_name=current_user.name,phone_number=current_user.phone_number,total_price=total_price,
+                      user_id=current_user.id,staff_id = staff.id, )
+    db.add(new_order)
     db.commit()
-    db.refresh(order)
-    return order
 
-@order_router.get("/orders", response_model=OrderResponse, status_code=status.HTTP_200_OK,
+    db.refresh(new_order)
+    return new_order
+
+@order_router.get("/order/get_all_order", response_model=OrderResponse, status_code=status.HTTP_200_OK,
                   dependencies=[Depends(role_checker(["user", "admin"]))])
 def get_all_orders(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
@@ -95,7 +86,9 @@ def update_order(order_id: int, order_update: OrderUpdate, db: Session = Depends
 
     order.total_price = total_price
     db.commit()
+
     db.refresh(order)
+
     return {"massage":"created"}
 
 
@@ -113,4 +106,5 @@ def delete_order(order_id: int, db: Session = Depends(get_db), current_user: Use
 
     db.delete(order)
     db.commit()
+
     return {"message": "Order deleted."}

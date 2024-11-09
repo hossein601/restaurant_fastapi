@@ -10,7 +10,6 @@ class Type(Enum):
     increase = 1
     decrease = 2
 
-
 class WalletHistory(TimeRecord,Base):
     __tablename__ = 'wallet_history'
 

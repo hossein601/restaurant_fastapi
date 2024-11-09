@@ -6,6 +6,9 @@ from routers.staff import staff_router
 from routers.user import user_router
 from routers.item import item_router
 
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 app.include_router(auth_router, prefix="/v1",tags=["auth"])
