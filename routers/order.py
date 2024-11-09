@@ -24,7 +24,7 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db), current
     assigned_staff = assign_staff(db)
 
     if not current_user.name:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User must have a name to place an order.")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User should have name . update profile.")
 
     order = Order(
         customer_name=current_user.name,
@@ -86,7 +86,7 @@ def update_order(order_id: int, order_update: OrderUpdate, db: Session = Depends
         if not item:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Item '{item_data.item_name}' not found")
         if item.stock < item_data.quantity:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Insufficient stock for '{item_data.item_name}'")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"not enough stock for '{item_data.item_name}'")
 
         order_item = OrderItem(order=order, item=item, quantity=item_data.quantity)
         db.add(order_item)
@@ -103,7 +103,7 @@ def update_order(order_id: int, order_update: OrderUpdate, db: Session = Depends
                      dependencies=[Depends(role_checker(["admin"]))])
 def delete_order(order_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
 
-    order = db.query(Order).filter(Order.id == order_id).first()
+    order = db.query(Order).filter(Order.id == order_id).one_or_none()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
 

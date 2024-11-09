@@ -16,6 +16,7 @@ def create_staff(staff_data: StaffCreate, db: Session = Depends(get_db)):
     new_staff = Staff(**staff_data.dict())
     db.add(new_staff)
     db.commit()
+
     db.refresh(new_staff)
     return new_staff
 
@@ -41,6 +42,7 @@ def update_staff(staff_id: int, staff_update: StaffUpdate, db: Session = Depends
     db.query(Staff).filter(Staff.id == staff_id).update(staff_data)
 
     db.commit()
+
     db.refresh(staff)
     return staff
 
@@ -56,4 +58,5 @@ def delete_staff(staff_id: int, db: Session = Depends(get_db)):
 
     db.delete(staff)
     db.commit()
-    return {"message": f"Staff member with ID {staff_id} has been deleted"}
+
+    return {"message": f"Staff member  {staff_id} has been deleted"}

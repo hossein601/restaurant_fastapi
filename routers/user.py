@@ -22,6 +22,7 @@ def update_user_profile(profile_data: UpdateProfile, db: Session = Depends(get_d
     current_user.name = profile_data.name
     current_user.address = profile_data.address
     db.commit()
+
     db.refresh(current_user)
     return current_user
 
@@ -29,12 +30,16 @@ def update_user_profile(profile_data: UpdateProfile, db: Session = Depends(get_d
 def increase_wallet(wallet_data: UpdateWalletRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     current_user.wallet += wallet_data.wallet
     db.commit()
+
     db.refresh(current_user)
     return {"wallet": current_user.wallet}
 @user_router.put("/users/decrease_wallet", response_model=UpdateWalletResponse, dependencies=[Depends(role_checker(["user", "admin"]))])
 def decrease_wallet(wallet_data: UpdateWalletRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.wallet<wallet_data.wallet:
+        raise HTTPException(status_code=403, detail="There is not enough money")
     current_user.wallet -= wallet_data.wallet
     db.commit()
+
     db.refresh(current_user)
     return {"wallet": current_user.wallet}
 
@@ -45,6 +50,7 @@ def delete_user(db: Session = Depends(get_db), current_user: User = Depends(get_
         db.delete(delete_user)
         db.commit()
         return {"success": True}
+
     raise HTTPException(status_code=404, detail="User not found")
 
 @user_router.put("/users/create_admin", status_code=status.HTTP_200_OK,)
@@ -54,5 +60,7 @@ def create_admin(role: CreateUserRequest, db: Session = Depends(get_db), current
 
     current_user.role = role.role
     db.commit()
+
     db.refresh(current_user)
+
     return {"success": True}
