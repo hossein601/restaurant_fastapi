@@ -1,6 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
+from typing import Literal
+
 
 class UserResponse(BaseModel):
     name:str
@@ -32,8 +34,6 @@ class UserSignin(BaseModel):
     phone_number: str
     password: str
 
-
-
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -51,4 +51,28 @@ class UpdateWalletResponse(BaseModel):
 
 class UpdateWalletRequest(BaseModel):
     wallet: int
+
+class DeleteUserResponse(BaseModel):
+    id:int
+
+class UserRequestProfile(BaseModel):
+    id:int
+
+class UserInformation(BaseModel):
+    name:str
+    address:str
+    phone_number:str
+    wallet:int
+    class Config:
+        orm_mode = True
+
+class CreateUserRequest(BaseModel):
+    role: Literal['user', 'admin']
+
+    class Config:
+        orm_mode = True
+
+class CreateAdminRequest(BaseModel):
+    name: str
+    phone_number: str
 

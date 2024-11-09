@@ -1,4 +1,3 @@
-# schemas/item.py
 from pydantic import BaseModel
 from typing import Optional
 
@@ -14,6 +13,9 @@ class ItemResponse(BaseModel):
     description: Optional[str]
     price: int
     stock: int
+
+    class Config:
+        orm_mode = True
 
 class ItemUpdate(BaseModel):
     name: Optional[str]

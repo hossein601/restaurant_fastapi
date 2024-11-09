@@ -1,4 +1,3 @@
-# auth_router.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from models import User
@@ -18,7 +17,9 @@ def create_user(user: UserSignin, db: Session = Depends(get_db)):
     hashed_password = bcrypt.hash(user.password)
     new_user = User(phone_number=user.phone_number, hashed_password=hashed_password)
     db.add(new_user)
+
     db.commit()
+
     db.refresh(new_user)
 
     return {"message": "User created successfully"}
@@ -30,4 +31,5 @@ def login(user_cred: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
     access_token = create_access_token(data={"sub": str(user.id)})
+
     return {"access_token": access_token, "token_type": "Bearer"}
