@@ -1,4 +1,6 @@
 # routers/user_router.py
+from http.client import responses
+
 from fastapi import APIRouter, Depends, HTTPException,status
 from sqlalchemy.orm import Session
 from dependencies import get_current_user, role_checker
@@ -17,7 +19,7 @@ def get_users_profile(db: Session = Depends(get_db), current_user: User = Depend
         raise HTTPException(status_code=404, detail="User not found")
     return user_info
 
-@user_router.put("/users/profile", dependencies=[Depends(role_checker(["user", "admin"]))])
+@user_router.put("/users/profile", response_model=UserInformation,dependencies=[Depends(role_checker(["user", "admin"]))])
 def update_user_profile(profile_data: UpdateProfile, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     current_user.name = profile_data.name
     current_user.address = profile_data.address
@@ -64,3 +66,24 @@ def create_admin(role: CreateUserRequest, db: Session = Depends(get_db), current
     db.refresh(current_user)
 
     return {"success": True}
+
+
+
+def authenticate_admin(username: str, password: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.name == username).first()
+
+    if user is None or not user.verify_password(password) or user.role != Role.admin:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password, or insufficient permissions",
+        )
+
+    return user
+from fastapi import FastAPI, Depends
+
+app = FastAPI()
+
+@app.post("/admin-login")
+def admin_login(username: str, password: str, user: User = Depends(authenticate_admin)):
+    # At this point, `user` is a verified admin
+    return {"message": f"Welcome, Admin {user.name}!"}
