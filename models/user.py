@@ -3,11 +3,8 @@ from enum import Enum
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import relationship
 from database.base import Base
-
 from models.time_record import TimeRecord
 from models.wallet_history import WalletHistory
-
-
 
 class Role(str, Enum):
     admin = "admin"
