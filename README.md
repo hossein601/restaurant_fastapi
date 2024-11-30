@@ -38,22 +38,25 @@ DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 
 usage:http://127.0.0.1:8000/docs
 options:
-sigin , login
+auth,
+user,
+staff,
+item,
+category,
+category_item,
+basket,
+order
 
 ```
 ```bash
->python main.py menu -h
-
-options:
-  -h, --help            show this help message and exit
-positional arguments:
-  {list,add,update,delete,filter}
-                        Menu commands
-    list                List all menu items
-    add                 Add a new menu item
-    update              Update menu item
-    delete              Delete a menu item
-    filter              Filter menu items
+auth/v1/sigin
+Request body:requierd
+{
+  "phone_number": "string",
+  "password": "string"
+}
+response
+access token
 
 ```
 ```bash
