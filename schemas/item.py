@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+
 
 class ItemCreate(BaseModel):
     name: str
@@ -22,3 +25,21 @@ class ItemUpdate(BaseModel):
     description: Optional[str]
     price: Optional[int]
     stock: Optional[int]
+
+
+class ItemInfo(BaseModel):
+    id:int
+    name: str
+    price: int
+    description: str
+    stock: int
+
+    class Config:
+        orm_mode = True
+
+class ItemInfoResponse(BaseModel):
+    items: List[ItemInfo]
+
+    class Config:
+        orm_mode = True
+

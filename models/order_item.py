@@ -12,5 +12,6 @@ class OrderItem(TimeRecord, Base):
     order_id = Column(Integer, ForeignKey('orders.id'))
     item_id = Column(Integer, ForeignKey('item.id'))
 
+
     order = relationship('Order', back_populates='order_items')
     item = relationship('Item', back_populates='order_items')

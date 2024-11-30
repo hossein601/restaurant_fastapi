@@ -1,14 +1,9 @@
-from enum import Enum
 from sqlalchemy import Column, Integer, ForeignKey, Float, String, DateTime
 from sqlalchemy.orm import relationship
 from database.base import Base
 from datetime import datetime
 from models.time_record import TimeRecord
 
-
-class Type(Enum):
-    increase = 1
-    decrease = 2
 
 class WalletHistory(TimeRecord,Base):
     __tablename__ = 'wallet_history'

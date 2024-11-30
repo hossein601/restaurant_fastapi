@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 from typing import List, Optional
 from schemas.item import ItemResponse
@@ -12,6 +14,7 @@ class OrderCreate(BaseModel):
 class OrderItemResponse(BaseModel):
     item: ItemResponse
     quantity: int
+    created_time: datetime
 
 class OrderResponse(BaseModel):
     id: int

@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from database.base import Base
 from models.time_record import TimeRecord
-from models.order_item import OrderItem
 
 
 class Item(TimeRecord, Base):
@@ -15,6 +14,9 @@ class Item(TimeRecord, Base):
     stock = Column(Integer, nullable=False)
 
     order_items = relationship('OrderItem', back_populates='item')
+    basket = relationship('BasketItem', back_populates='items')
+
+    category  = relationship('CategoryItem', back_populates='item_category')
 
     def decrease_stock(self, quantity):
         if self.stock >= quantity:

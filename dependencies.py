@@ -6,9 +6,8 @@ from config import setting
 from database.base import get_db
 from models.user import User
 
+
 token_auth_scheme = HTTPBearer()
-
-
 
 def get_current_user(token: HTTPAuthorizationCredentials = Depends(token_auth_scheme),
                      db: Session = Depends(get_db)) -> User:
@@ -35,10 +34,8 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(token_auth_sc
 def role_checker(required_role:list):
     def checker(current_user=Depends(get_current_user)):
         if current_user.role not in required_role:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Access denied "
-            )
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Access denied ")
+
         return current_user
 
     return checker
