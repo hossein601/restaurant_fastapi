@@ -15,6 +15,7 @@ pip install python-dotenv
 pip install fastapi
 pip install alembic
 pip install JWT
+pip install bcrypt
 ```
 ### from source
 ```bash
