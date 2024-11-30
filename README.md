@@ -52,6 +52,7 @@ order
 ## auth
 ```bash
 POST/v1/sigin
+role in [admin,user]
 Request body:requierd
 {
   "phone_number": "string",
@@ -63,6 +64,7 @@ access token
 ```
 ```bash
 POST/v1/login
+role in [admin,user]
 Request body:requierd
 {
   "phone_number": "string",
@@ -74,6 +76,7 @@ access token
 ## user
 ```bash
 GET/v1/users
+role in [admin,user]
 response
 {
   "name": "string",
@@ -84,6 +87,7 @@ response
 ```
 ```bash
 PUT/v1/users
+role in [admin,user]
 rquest
 {
   "name": "string",
@@ -97,5 +101,42 @@ response
   "wallet": 0
 }
 ```
-
-
+```bash
+PUT/v1/users/increase wallet
+rquest
+{
+  "wallet": 0
+}
+response
+{
+  "wallet": 0
+}
+```
+```bash
+PUT/v1/users/decrease wallet
+role in [admin,user]
+rquest
+{
+  "wallet": 0
+}
+response
+{
+  "wallet": 0
+}
+```
+```bash
+PUT/v1/users/decrease wallet
+role in [admin,user]
+rquest
+{
+  "wallet": 0
+}
+response
+{
+  "wallet": 0
+}
+```
+```bash
+DELETE/v1/users/
+role in [admin]
+```
