@@ -49,7 +49,8 @@ order
 
 ```
 ```bash
-auth/v1/sigin
+auth
+POST/v1/sigin
 Request body:requierd
 {
   "phone_number": "string",
@@ -60,49 +61,43 @@ access token
 
 ```
 ```bash
->python main.py order -h
+auth
+POST/v1/login
+Request body:requierd
+{
+  "phone_number": "string",
+  "password": "string"
+}
+response
+access token
+```
 
-positional arguments:
-  {list,add,update,delete}
-                        Order commands
-    list                List all orders
-    add                 Create a new order
-    update              Update an existing order
-    delete              Delete an order
-
-options:
-  -h, --help            show this help message and exit
-
+```bash
+user
+GET/v1/users
+response
+{
+  "name": "string",
+  "address": "string",
+  "phone_number": "string",
+  "wallet": 0
+}
 ```
 ```bash
->python main.py reserve -h
-
-positional arguments:
-  {list,add,update,delete}
-                        Reserve commands
-    list                List all reservations
-    add                 Create a new reservation
-    update              Update an existing reservation
-    delete              Delete a reservation
-
-options:
-  -h, --help            show this help message and exit
-      
+user
+PUT/v1/users
+rquest
+{
+  "name": "string",
+  "address": "string"
+}
+response
+{
+  "name": "string",
+  "address": "string",
+  "phone_number": "string",
+  "wallet": 0
+}
 ```
-```bash
->python main.py staff -h
 
-positional arguments:
-  {list,add,update,delete,filter}
-                        Staff commands
-    list                List all staff members
-    add                 Add a new staff member
-    update              Update an existing staff member
-    delete              Delete a staff member
-    filter              staff for each order
-
-options:
-  -h, --help            show this help message and exit
-
-```
 
