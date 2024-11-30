@@ -48,7 +48,7 @@ basket,
 order
 
 ```
-##auth
+## auth
 ```bash
 auth
 POST/v1/sigin
@@ -72,7 +72,7 @@ Request body:requierd
 response
 access token
 ```
-##user
+## user
 ```bash
 user
 GET/v1/users
