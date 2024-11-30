@@ -36,16 +36,9 @@ DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 ```bash
 >uvicorn main:app --reload
 
-usage: main.py [-h] {menu,order,reserve,staff} ...
+usage:http://127.0.0.1:8000/docs
 options:
-  -h, --help            show this help message and exit
-positional arguments:
-  {menu,order,reserve,staff}
-                        commands
-    menu                Manage items
-    order               Manage orders
-    reserve             Manage reservations
-    staff               Manage staff
+sigin , login
 
 ```
 ```bash
