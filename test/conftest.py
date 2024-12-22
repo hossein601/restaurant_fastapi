@@ -17,7 +17,6 @@ SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:1234@localhost/test13"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-
 def override_get_db():
     db = TestingSessionLocal()
     try:

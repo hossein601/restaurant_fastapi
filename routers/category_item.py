@@ -7,7 +7,6 @@ from dependencies import get_current_user, role_checker
 from models.user import User
 from schemas.category_item import CategoryItemResponse, CategoryItemListResponse, \
     CategoryItemUpdate, Category_item_to_category, CategoryItemUpdateOut, Category_assign_item
-
 category_item_router = APIRouter()
 
 @category_item_router.get("/category_items/{category_id}/", status_code=status.HTTP_200_OK, response_model=LimitOffsetPage[CategoryItemResponse] ,
@@ -21,7 +20,6 @@ def get_items_for_category(category_id: int,db: Session = Depends(get_db),curren
     items = [db.query(Item).filter(Item.id == per.item_id).first() for per in category_items]
     categoyItemOut = [CategoryItemResponse(id = per.id,name =per.name,price = per.price,stock = per.stock)for per in items]
     return paginate(categoyItemOut)
-
 
 @category_item_router.post("/category_items/{category_id}/",response_model=Category_item_to_category, status_code=status.HTTP_201_CREATED,
                            dependencies=[Depends(role_checker(["admin"]))])
@@ -54,7 +52,6 @@ def update_item_categories(data:CategoryItemUpdate,id_category: int ,db: Session
     db.commit()
     db.refresh(category_item)
     return category_item
-
 @category_item_router.delete("/category_items/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_category_item(item_id: int,category_id: int,db: Session = Depends(get_db),current_user: User = Depends(get_current_user)):
     category_item = db.query(CategoryItem).filter(CategoryItem.category_id == category_id, CategoryItem.item_id == item_id,).one_or_none()

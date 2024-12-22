@@ -30,12 +30,12 @@ def create_basket(actions: BasketCreateItem, db: Session = Depends(get_db),
         user_basket = Basket(user_id=current_user.id)
         db.add(user_basket)
         db.commit()
+
         db.refresh(user_basket)
 
     basket_item = db.query(BasketItem).filter(
         BasketItem.basket_id == user_basket.id, BasketItem.item_id == actions.item_id
     ).one_or_none()
-
     if basket_item:
         if item.stock > 0 and item.max_amount > 0:
             basket_item.quantity = 1
@@ -85,8 +85,6 @@ def add_remove_item(actions: BasketCreateItem, db: Session = Depends(get_db),
             db.refresh(basket_item)
             return Response(status_code=HTTP_200_OK)
 
-
-
     if  actions.add :
         if item.stock > basket_item.quantity and item.max_amount > basket_item.quantity:
             basket_item.quantity += 1
@@ -110,7 +108,6 @@ def get_basket(db: Session = Depends(get_db), current_user: User = Depends(get_c
 
     return paginate(BasketOutPut)
 
-
 @basket_router.delete("/baskets/", status_code=status.HTTP_200_OK,
                       dependencies=[Depends(role_checker(["user", "admin"]))])
 def delete_from_basket(delete:bool = None,item_id: int = None , db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
@@ -132,7 +129,6 @@ def delete_from_basket(delete:bool = None,item_id: int = None , db: Session = De
     elif delete:
         db.query(BasketItem).filter(BasketItem.basket_id == user_basket.id).delete()
         db.commit()
-
         return {"message": "Basket deleted"}
 
     else:

@@ -28,8 +28,6 @@ class StaffCreate(BaseModel):
                 raise HTTPException(status_code=400, detail="description should be string")
         return data
 
-
-
 class StaffUpdate(BaseModel):
     name: Optional[str]=Field(default=None, title="The name of the staff", max_length=30)
     position: Optional[str]=Field(default=None, title="The position of the staff", max_length=30)
