@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -15,14 +15,14 @@ class BasketResponse(BaseModel):
     item_id: int
     quantity: int
 
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class BasketCreateItem(BaseModel):
-    item_id: int
-    quantity: int
+    item_id:int
+    add:bool
+
+
 
     class Config:
         orm_mode = True
@@ -31,4 +31,4 @@ class BasketItemResponse(BaseModel):
     items: List[BasketResponse]
 
     class Config:
-        orm_mode = True
+        model_config = ConfigDict(from_attributes=True)

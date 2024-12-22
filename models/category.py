@@ -8,7 +8,7 @@ class Category(TimeRecord, Base):
     __tablename__ = "category"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    description = Column(String, nullable=False)
+    name = Column(String(50), unique=True, nullable=False)
+    description = Column(String(255), nullable=False)
 
-    item = relationship("CategoryItem",back_populates="categories")
+    item = relationship("CategoryItem", back_populates="categories")

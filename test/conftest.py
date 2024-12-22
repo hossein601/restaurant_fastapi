@@ -9,9 +9,10 @@ import jwt
 import bcrypt
 from models import Category, Item, Basket, BasketItem, Staff, CategoryItem, Order
 from models.user import User
+
 SECRET_KEY = "17cc637a3dedf881022df527e03936a740f205e1b1991d73ed01e5a40dd0607e"
 ALGORITHM = "HS256"
-SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:1234@localhost/test_rest8"
+SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:1234@localhost/test13"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -36,6 +37,7 @@ def setup_test_db():
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
+
 
 @pytest.fixture
 def client():
@@ -71,6 +73,7 @@ def test_admin():
             role="admin",
             hashed_password=hashed_password,
             address="shargi",
+            created_time = '2020-12-04T16:26:14.585Z'
         )
         db.add(admin)
         db.commit()
@@ -101,6 +104,26 @@ def test_item():
             description="Iranian food",
             price=20,
             stock=10,
+            created_time='2020-12-04T16:26:14.585Z',
+            max_amount= 20
+        )
+        db.add(item)
+        db.commit()
+        db.refresh(item)
+        yield item
+        db.delete(item)
+        db.commit()
+
+@pytest.fixture
+def test_item_stock_zero():
+    with TestingSessionLocal() as db:
+        item = Item(
+            name="gheime",
+            description="Italian food",
+            price=30,
+            stock=0,
+            created_time='2020-12-04T16:26:14.585Z',
+            max_amount= 20
         )
         db.add(item)
         db.commit()
@@ -155,7 +178,55 @@ def test_basket_item(test_basket, test_item,test_user):
         basket_item = BasketItem(
             basket_id=test_basket.id,
             item_id=test_item.id,
-            quantity=3,
+            quantity=1,
+        )
+        db.add(basket_item)
+        db.commit()
+        db.refresh(basket_item)
+        yield basket_item
+        db.delete(basket_item)
+        db.commit()
+
+@pytest.fixture
+def test_basket_not_enough_stock(test_user):
+    with TestingSessionLocal() as db:
+        basket = Basket(user_id=3,)
+        db.add(basket)
+        db.commit()
+        db.refresh(basket)
+        yield basket
+        db.delete(basket)
+        db.commit()
+
+
+
+
+@pytest.fixture
+def test_item_not_enough_stock():
+    with TestingSessionLocal() as db:
+        item = Item(
+            name="kabab",
+            description="Iranian food",
+            price=20,
+            stock=0,
+            created_time='2020-12-04T16:26:14.585Z',
+            max_amount= 20
+        )
+        db.add(item)
+        db.commit()
+        db.refresh(item)
+        yield item
+        db.delete(item)
+        db.commit()
+
+
+@pytest.fixture
+def test_basket_item_not_enough_stock(test_basket, test_item,test_user):
+    with TestingSessionLocal() as db:
+        basket_item = BasketItem(
+            basket_id=test_basket.id,
+            item_id=test_item_not_enough_stock.id,
+            quantity=1,
         )
         db.add(basket_item)
         db.commit()
@@ -171,7 +242,10 @@ def test_staff():
         staff = Staff(
             phone_number="09014751765",
             name = "hassan",
-            position="chef"
+            position="chef",
+            created_time = '2020-12-04T16:26:14.585Z',
+            updated_time = '2021-12-04T16:26:14.585Z',
+
         )
         db.add(staff)
         db.commit()
@@ -188,6 +262,7 @@ def test_item_without_category():
             description="Iranian food",
             price=13,
             stock=50,
+            max_amount=20
         )
         db.add(item)
         db.commit()
@@ -196,14 +271,3 @@ def test_item_without_category():
         db.delete(item)
 
         db.commit()
-
-# @pytest.fixture
-# def test_new_order(test_user):
-#     with TestingSessionLocal() as db:
-#         order = Order(
-#             customer_name = test_user.name,
-#             phone_number = test_user.phone_number,
-#             address = test_user.address,
-#             total_price = 40,
-#
-#         )

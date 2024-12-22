@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi_pagination import LimitOffsetPage, paginate
 from sqlalchemy.orm import Session
 from typing import Optional
 from database.base import get_db
@@ -10,7 +11,7 @@ from models.user import User
 category_router = APIRouter()
 
 
-@category_router.post("/category/", status_code=status.HTTP_201_CREATED, response_model=CategoryInfo,
+@category_router.post("/categories/", status_code=status.HTTP_201_CREATED, response_model=CategoryInfo,
                       dependencies=[Depends(role_checker(["admin"]))])
 def create_category(data: CategoryCreate, db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)):
@@ -25,7 +26,7 @@ def create_category(data: CategoryCreate, db: Session = Depends(get_db),
     return category
 
 
-@category_router.put("/category/{category_id}", status_code=status.HTTP_200_OK, response_model=CategoryResponse,
+@category_router.put("/categories/{category_id}", status_code=status.HTTP_200_OK, response_model=CategoryResponse,
                      dependencies=[Depends(role_checker(["admin"]))])
 def update_category(category_id: str, data: CategoryCreate, db: Session = Depends(get_db),
                     current_user: User = Depends(get_current_user)):
@@ -41,9 +42,9 @@ def update_category(category_id: str, data: CategoryCreate, db: Session = Depend
         message=f"Category updated with name {category.name} and description {category.description}")
 
 
-@category_router.delete("/category/{category_id}", status_code=status.HTTP_204_NO_CONTENT,
+@category_router.delete("/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT,
                         dependencies=[Depends(role_checker(["admin"]))])
-def delete_category(category_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def delete_category(category_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     category = db.query(Category).filter(Category.id == category_id).first()
     if not category:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
@@ -53,8 +54,8 @@ def delete_category(category_id: str, db: Session = Depends(get_db), current_use
     return {"message": "Category deleted successfully"}
 
 
-@category_router.get("/category/search", status_code=status.HTTP_200_OK, response_model=CategoryInfoResponse,
-                     dependencies=[Depends(role_checker(["admin"]))])
+@category_router.get("/categories/", status_code=status.HTTP_200_OK, response_model=LimitOffsetPage[CategoryInfo],
+                     dependencies=[Depends(role_checker(["admin","user"]))])
 def search_categories(name: Optional[str] = Query(None, description="Filter by category name"),
                       description: Optional[str] = Query(None, description="Filter by category description"),
                       get_category :Optional[bool] =Query(None, description="Get all categories"),
@@ -67,9 +68,7 @@ def search_categories(name: Optional[str] = Query(None, description="Filter by c
         query = query.filter(Category.description.ilike(f"%{description}%"))
     if get_category:
         query= query
-
-
     categories = query.all()
-    response = [CategoryInfo(id = item.id,name=item.name, description=item.description, created_at=item.created_time) for item in
+    response = [CategoryInfo(id = category.id,name=category.name, description=category.description, created_at=category.created_time) for category in
                 categories]
-    return CategoryInfoResponse(categories=response)
+    return paginate(response)

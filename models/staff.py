@@ -8,7 +8,6 @@ class Staff(TimeRecord, Base):
     __tablename__ = "staff"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    phone_number=Column(String, nullable=False)
-    orders = relationship("Order", back_populates="staff")
-    position = Column(String, nullable=False)
+    name = Column(String(100), nullable=False)
+    phone_number = Column(String(15), nullable=False, unique=True)
+    position = Column(String(50), nullable=False)

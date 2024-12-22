@@ -1,37 +1,27 @@
-from pydantic import BaseModel, Field
 from datetime import datetime
-from pydantic import BaseModel
 from typing import Optional
-from typing import Literal
-from pydantic import BaseModel, Field
-from pydantic import BaseModel, ValidationError, ValidationInfo, field_validator
+from pydantic import  Field
+from pydantic import BaseModel, field_validator
 from fastapi import  HTTPException
 import re
 
 
-
 class UserResponse(BaseModel):
-    name:str
-    address:str
+    name:str =Field(default=None, title="The name of the user", max_length=30)
+    address:str =Field(default=None, title="The description of the address", max_length=100)
     created_time: datetime
 class UserCreate(BaseModel):
     id:str
-    name: str
-    address: str
+    name: str=Field(default=None, title="The description of the name", max_length=30)
+    address: str=Field(default=None, title="The description of the address", max_length=30)
 class UserUpdate(BaseModel):
-    name: Optional[str] = None
-    wallet: Optional[int] = None
+    name: Optional[str] = Field(default=None, title="The description of the address", max_length=30)
+    wallet: Optional[int] =Field(default= 0,le=10000,gt=0, description="The wallet must be greater than zero")
     password: str
-
     class Config:
         orm_mode = True
-class UserOut(BaseModel):
-    name: Optional[str] = None
-    phone_number:str
-    wallet: int
 
-    class Config:
-        orm_mode = True
+
 
 class UserLogin(BaseModel):
     phone_number:str
@@ -56,8 +46,6 @@ class UserLogin(BaseModel):
         orm_mode = True
 
 
-
-
 class UserSignin(BaseModel):
     phone_number: str
     password: str
@@ -68,7 +56,6 @@ class UserSignin(BaseModel):
         if not rule.search(value):
             raise HTTPException(status_code=400, detail="Password in not valid")
         return value
-
 
 
     @field_validator("phone_number")
@@ -82,48 +69,32 @@ class UserSignin(BaseModel):
 
     class Config:
         orm_mode = True
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
 class UpdateProfile(BaseModel):
-    name: str
-    address: str
+    name:str =Field(default=None, title="The name of the user", max_length=30)
+    address: str=Field(default=None, title="The description of the address", max_length=30)
 
     class Config:
         orm_mode = True
+
 class UpdateWalletResponse(BaseModel):
     wallet: int
+    created_time:datetime
+
     class Config:
         orm_mode = True
 
 class UpdateWalletRequest(BaseModel):
     wallet: int
 
-class DeleteUserResponse(BaseModel):
-    id:int
-
-class UserRequestProfile(BaseModel):
-    id:int
 
 class UserInformation(BaseModel):
     name: Optional[str] = None
     address:Optional[str] = None
     phone_number:str
     wallet:int
+    created_time:datetime
     class Config:
         orm_mode = True
 
-class CreateUserRequest(BaseModel):
-    role: Literal['user', 'admin']
-
-    class Config:
-        orm_mode = True
-
-class CreateAdminRequest(BaseModel):
-    name: str
-    phone_number:str
-
-    class Config:
-        orm_mode = True
 

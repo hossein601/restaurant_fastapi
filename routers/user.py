@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from dependencies import get_current_user, role_checker
 from database.base import get_db
 from models.user import User
-from schemas.user import  UpdateProfile, UpdateWalletRequest, UserInformation, CreateAdminRequest, \
+from schemas.user import  UpdateProfile, UpdateWalletRequest, UserInformation, \
     UpdateWalletResponse
 import bcrypt
 
@@ -37,7 +37,7 @@ def increase_wallet(wallet_data: UpdateWalletRequest, db: Session = Depends(get_
     db.commit()
 
     db.refresh(current_user)
-    return {"wallet": current_user.wallet}
+    return current_user
 
 
 @user_router.put("/users/decrease_wallet", response_model=UpdateWalletResponse,
@@ -50,7 +50,7 @@ def decrease_wallet(wallet_data: UpdateWalletRequest, db: Session = Depends(get_
     db.commit()
 
     db.refresh(current_user)
-    return {"wallet": current_user.wallet}
+    return current_user
 
 
 @user_router.delete("/users/",status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(role_checker(["admin","user"]))])

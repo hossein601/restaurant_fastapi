@@ -1,11 +1,11 @@
 from .basket import basket_router
-from .category_item import category_item_router
 from .cateogry import category_router
 from .item import item_router
 from .order import order_router
 from .user import user_router
 from .auth import auth_router
 from .staff import staff_router
+from  .category_item import category_item_router
 
 
 

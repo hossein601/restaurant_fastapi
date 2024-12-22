@@ -119,3 +119,24 @@ def test_delete_user(client, test_admin):
                              headers={"Authorization": f"Bearer {token}"},)
 
     assert response.status_code == 204
+
+def test_validation_name(client,test_user):
+    token = generate_test_token(user_id=test_user.id, role=test_user.role)
+    response = client.put(
+        "/v1/users/",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"name": "asdfasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddasdddddddddddddddddd","address":"tehran"}
+    )
+    assert response.status_code == 422
+    data = response.json()
+
+def test_validation_address(client,test_user):
+    token = generate_test_token(user_id=test_user.id, role=test_user.role)
+    response = client.put(
+        "/v1/users/",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"name": "hossein","address":"tehranaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasddddddddddddddddddddddddddddddddddddasddddddd"}
+    )
+    assert response.status_code == 422
+    data = response.json()
+

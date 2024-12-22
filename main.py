@@ -1,6 +1,6 @@
-
 from fastapi import FastAPI
-from routers.category_item import category_item_router
+from fastapi_pagination import add_pagination
+from routers import category_item_router
 from routers.cateogry import category_router
 from routers.basket import basket_router
 from routers.auth import auth_router
@@ -8,8 +8,8 @@ from routers.staff import staff_router
 from routers.user import user_router
 from routers.item import item_router
 from routers.order import order_router
-
 app = FastAPI()
+add_pagination(app)
 
 app.include_router(auth_router, prefix="/v1",tags=["auth"])
 app.include_router(user_router, prefix="/v1",tags=["user"])

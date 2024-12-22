@@ -35,4 +35,3 @@ class User(TimeRecord, Base):
 
     def verify_password(self, password: str):
         return bcrypt.checkpw(password.encode("utf-8"), self.hashed_password.encode("utf-8"))
-
