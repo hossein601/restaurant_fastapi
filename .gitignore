@@ -11,4 +11,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 !**/migrations/**/__pycache__/
-!**/test/**/__pycache__/
+!**/test/**/__pycache__/.idea
