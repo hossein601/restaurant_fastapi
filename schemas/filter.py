@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi_filter.contrib.sqlalchemy import Filter
 from openai import BaseModel
 
-from models import Item, Category
+from models import Item
 
 
 class ItemFilter(Filter):

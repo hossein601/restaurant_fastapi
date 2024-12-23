@@ -1,25 +1,46 @@
 from datetime import datetime
-from typing import Optional
-from pydantic import  Field
+from typing import Optional, Any
+from pydantic import Field, model_validator
 from pydantic import BaseModel, field_validator
 from fastapi import  HTTPException
 import re
-
-
 class UserResponse(BaseModel):
     name:str =Field(default=None, title="The name of the user", max_length=30)
     address:str =Field(default=None, title="The description of the address", max_length=100)
     created_time: datetime
+
 class UserCreate(BaseModel):
     id:str
     name: str=Field(default=None, title="The description of the name", max_length=30)
     address: str=Field(default=None, title="The description of the address", max_length=30)
+    @model_validator(mode='before')
+    @classmethod
+    def validate_atts(cls, data: Any):
+        if isinstance(data, dict):
+            name = data.get('name')
+            address = data.get('price')
+            if not isinstance(name, str):
+                raise HTTPException(status_code=400, detail="name should be string")
+            if not isinstance(address, str):
+                raise HTTPException(status_code=400, detail="description should be string")
+        return data
+
 class UserUpdate(BaseModel):
     name: Optional[str] = Field(default=None, title="The description of the address", max_length=30)
     wallet: Optional[int] =Field(default= 0,le=10000,gt=0, description="The wallet must be greater than zero")
     password: str
-    class Config:
-        orm_mode = True
+
+    @model_validator(mode='before')
+    @classmethod
+    def validate_atts(cls, data: Any):
+        if isinstance(data, dict):
+            name = data.get('name')
+            wallet = data.get('price')
+            if not isinstance(name, str):
+                raise HTTPException(status_code=400, detail="name should be string")
+            if not isinstance(wallet, int):
+                raise HTTPException(status_code=400, detail="description should be string")
+        return data
 
 
 
@@ -57,7 +78,6 @@ class UserSignin(BaseModel):
             raise HTTPException(status_code=400, detail="Password in not valid")
         return value
 
-
     @field_validator("phone_number")
     def validate_mobile(cls ,value):
 
@@ -71,11 +91,19 @@ class UserSignin(BaseModel):
         orm_mode = True
 
 class UpdateProfile(BaseModel):
-    name:str =Field(default=None, title="The name of the user", max_length=30)
+    name: str=Field(default=None, title="The description of the name", max_length=30)
     address: str=Field(default=None, title="The description of the address", max_length=30)
-
-    class Config:
-        orm_mode = True
+    @model_validator(mode='before')
+    @classmethod
+    def validate_atts(cls, data: Any):
+        if isinstance(data, dict):
+            name = data.get('name')
+            address = data.get('price')
+            if not isinstance(name, str) or len(name)<0 or len(name)<30:
+                raise HTTPException(status_code=400, detail="name should be string")
+            if not isinstance(address, str):
+                raise HTTPException(status_code=400, detail="description should be string")
+        return data
 
 class UpdateWalletResponse(BaseModel):
     wallet: int

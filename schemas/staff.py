@@ -12,37 +12,16 @@ class StaffResponse(BaseModel):
 
 class StaffCreate(BaseModel):
     phone_number: str
-    name: str=Field(default=None, title="The name of the staff", max_length=30)
-    position:str=Field(default=None, title="The position of the staff", max_length=30)
+    name: str
+    position:str
     created_time: datetime
 
-    @model_validator(mode='before')
-    @classmethod
-    def validate_atts(cls, data: Any):
-        if isinstance(data, dict):
-            name = data.get('name')
-            position = data.get('description')
-            if not isinstance(name, str):
-                raise HTTPException(status_code=400, detail="name should be string")
-            if not isinstance(position, str):
-                raise HTTPException(status_code=400, detail="description should be string")
-        return data
 
 class StaffUpdate(BaseModel):
-    name: Optional[str]=Field(default=None, title="The name of the staff", max_length=30)
-    position: Optional[str]=Field(default=None, title="The position of the staff", max_length=30)
+    name: Optional[str]
+    position: Optional[str]
     updated_time: datetime
 
-    @model_validator(mode='before')
-    @classmethod
-    def validate_atts(cls, data: Any):
-        if isinstance(data, dict):
-            name = data.get('name')
-            position = data.get('description')
-            if not isinstance(name, str):
-                raise HTTPException(status_code=400, detail="name should be string")
-            if not isinstance(position, str):
-                raise HTTPException(status_code=400, detail="description should be string")
-        return data
+
 
 

@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field, model_validator
 from typing import List, Any
-from datetime import datetime
 from fastapi import HTTPException
 
 class CategoryCreate(BaseModel):
@@ -13,9 +12,9 @@ class CategoryCreate(BaseModel):
         if isinstance(data, dict):
             name = data.get('name')
             description = data.get('description')
-            if not isinstance(name, str):
+            if not isinstance(name, str) or len(name)>30 or len(name)<1:
                 raise HTTPException(status_code=400, detail="name should be string")
-            if not isinstance(description, str):
+        if not isinstance(description, str) or len(description)>30 or len(description)<1:
                 raise HTTPException(status_code=400, detail="description should be string")
         return data
 

@@ -1,8 +1,6 @@
 from datetime import datetime
-
 from pydantic import BaseModel,Field
 from typing import List, Optional
-from schemas.item import ItemResponse
 
 class OrderItemCreate(BaseModel):
     item_name: str=Field(default=None, title="The name of the staff", max_length=30)

@@ -1,7 +1,7 @@
 from fastapi_pagination import LimitOffsetPage
 from fastapi_pagination.iterables import paginate
 from sqlalchemy import event
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
 from models.order import Order
 from models.order_item import OrderItem
@@ -11,7 +11,7 @@ from models.basket_item import BasketItem
 from database.base import get_db
 from dependencies import get_current_user, role_checker
 from models.user import User
-from schemas.order import OrderItemResponse, OrderGetResponsePaginate
+from schemas.order import  OrderGetResponsePaginate
 
 order_router = APIRouter()
 

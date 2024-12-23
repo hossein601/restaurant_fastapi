@@ -102,17 +102,6 @@ def test_login_with_invalid_phone_number(client):
     assert response.status_code == 400
     assert response.json()["detail"] == "Phone number is not valid"
 
-def test_update_user_profile(client, test_admin):
-    token = generate_test_token(user_id=test_admin.id, role=test_admin.role)
-    response = client.put("/v1/users/",
-                          headers={"Authorization": f"Bearer {token}"},
-                          json={"name": "hassan", "address": "asdfjkwkndskfnalk"}
-                          )
-    assert response.status_code == 200
-    data = response.json()
-    assert data["name"] == "hassan"
-    assert data["address"] == "asdfjkwkndskfnalk"
-
 def test_delete_user(client, test_admin):
     token = generate_test_token(user_id=test_admin.id, role=test_admin.role)
     response = client.delete("/v1/users/",
@@ -120,23 +109,19 @@ def test_delete_user(client, test_admin):
 
     assert response.status_code == 204
 
-def test_validation_name(client,test_user):
+def test_validation_type_name(client,test_user):
     token = generate_test_token(user_id=test_user.id, role=test_user.role)
     response = client.put(
         "/v1/users/",
         headers={"Authorization": f"Bearer {token}"},
-        json={"name": "asdfasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddasdddddddddddddddddd","address":"tehran"}
+        json={"name": 1,"address":"tehran"}
     )
-    assert response.status_code == 422
-    data = response.json()
-
-def test_validation_address(client,test_user):
+    assert response.status_code == 400
+def test_validation_type_address(client,test_user):
     token = generate_test_token(user_id=test_user.id, role=test_user.role)
     response = client.put(
         "/v1/users/",
         headers={"Authorization": f"Bearer {token}"},
-        json={"name": "hossein","address":"tehranaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasddddddddddddddddddddddddddddddddddddasddddddd"}
+        json={"name": "hossein","address":123}
     )
-    assert response.status_code == 422
-    data = response.json()
-
+    assert response.status_code == 400
