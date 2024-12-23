@@ -4,6 +4,7 @@ from pydantic import Field, model_validator
 from pydantic import BaseModel, field_validator
 from fastapi import  HTTPException
 import re
+
 class UserResponse(BaseModel):
     name:str =Field(default=None, title="The name of the user", max_length=30)
     address:str =Field(default=None, title="The description of the address", max_length=100)
@@ -11,18 +12,20 @@ class UserResponse(BaseModel):
 
 class UserCreate(BaseModel):
     id:str
-    name: str=Field(default=None, title="The description of the name", max_length=30)
-    address: str=Field(default=None, title="The description of the address", max_length=30)
+    name: str=Field(title="The description of the name", max_length=30)
+    address: str=Field(title="The description of the address", max_length=30)
+
     @model_validator(mode='before')
     @classmethod
     def validate_atts(cls, data: Any):
         if isinstance(data, dict):
             name = data.get('name')
-            address = data.get('price')
-            if not isinstance(name, str):
+            address = data.get('address')
+            if not isinstance(name, str) or len(name)<0 or len(name)>30:
                 raise HTTPException(status_code=400, detail="name should be string")
-            if not isinstance(address, str):
-                raise HTTPException(status_code=400, detail="description should be string")
+
+            if not isinstance(address, str) or len(address)<0 or len(address)>30:
+                raise HTTPException(status_code=400, detail="address should be string")
         return data
 
 class UserUpdate(BaseModel):
@@ -35,9 +38,10 @@ class UserUpdate(BaseModel):
     def validate_atts(cls, data: Any):
         if isinstance(data, dict):
             name = data.get('name')
-            wallet = data.get('price')
+            wallet = data.get('wallet')
             if not isinstance(name, str):
                 raise HTTPException(status_code=400, detail="name should be string")
+
             if not isinstance(wallet, int):
                 raise HTTPException(status_code=400, detail="description should be string")
         return data
@@ -91,18 +95,19 @@ class UserSignin(BaseModel):
         orm_mode = True
 
 class UpdateProfile(BaseModel):
-    name: str=Field(default=None, title="The description of the name", max_length=30)
-    address: str=Field(default=None, title="The description of the address", max_length=30)
+    name: str=Field( title="The description of the name", max_length=30)
+    address: str=Field( title="The description of the address", max_length=30)
+
     @model_validator(mode='before')
     @classmethod
     def validate_atts(cls, data: Any):
         if isinstance(data, dict):
             name = data.get('name')
-            address = data.get('price')
-            if not isinstance(name, str) or len(name)<0 or len(name)<30:
+            address = data.get('address')
+            if not isinstance(name, str) or len(name)<0 or len(name)>30:
                 raise HTTPException(status_code=400, detail="name should be string")
-            if not isinstance(address, str):
-                raise HTTPException(status_code=400, detail="description should be string")
+            if not isinstance(address, str) or len(address)<0 or len(address)>30:
+                raise HTTPException(status_code=400, detail="address should be string")
         return data
 
 class UpdateWalletResponse(BaseModel):
@@ -115,6 +120,14 @@ class UpdateWalletResponse(BaseModel):
 class UpdateWalletRequest(BaseModel):
     wallet: int
 
+    @model_validator(mode='before')
+    @classmethod
+    def validate_atts(cls, data: Any):
+        if isinstance(data, dict):
+            wallet = data.get('wallet')
+            if not isinstance(wallet, int) or wallet<1 or wallet>10000:
+                raise HTTPException(status_code=400, detail="wallet should be integer and less than 10000")
+        return data
 
 class UserInformation(BaseModel):
     name: Optional[str] = None

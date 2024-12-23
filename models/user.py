@@ -4,7 +4,6 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from database.base import Base
 from models.time_record import TimeRecord
-from models.wallet_history import WalletHistory
 
 class Role(str, Enum):
     admin = "admin"

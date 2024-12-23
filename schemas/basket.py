@@ -1,7 +1,7 @@
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import  ConfigDict
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import  List
 
 class BasketResponseItem(BaseModel):
     item_id: int

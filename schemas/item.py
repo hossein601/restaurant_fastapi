@@ -25,12 +25,16 @@ class ItemCreate(BaseModel):
 
             if not isinstance(name, str) or len(name)>30 or len(name)<0:
                 raise HTTPException(status_code=400, detail="name should be string and length more than 30 characters")
+
             if not isinstance(description, str) or len(description)>100 or len(description)<0:
                 raise HTTPException(status_code=400, detail="description should be string and length more than 100 characters")
+
             if not isinstance(price, int) or price>10000 or price<0:
                 raise HTTPException(status_code=400, detail="price should be integer and less than 10000 characters")
+
             if not isinstance(stock, int) or stock>10000 or stock<0:
                 raise HTTPException(status_code=400, detail="stock should be integer and less than 10000 characters")
+
             if not isinstance(max_amount, int) or max_amount>10000 or max_amount<0:
                 raise HTTPException(status_code=400, detail="max_amount should be integer and less than 10000 characters")
         return data

@@ -7,7 +7,7 @@
 
 First should install requirement.txt. Then create new database and add yoour database. create your own database.
 
-### from source
+### From source
 ```bash
 git clone https://github.com/hossein601/restaurant_fastapi.git
 cd restaurant
