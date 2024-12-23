@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21552ede-199f-4e2e-901a-4bcc2fce1a23" name="Changes" comment="change Apis">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas/basket.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/basket.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas/item.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/item.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas/staff.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/staff.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/basket.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/basket.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/cateogry.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/cateogry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/order.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/category.py" beforeDir="false" afterPath="$PROJECT_DIR$/schemas/category.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -426,7 +425,7 @@
       <workItem from="1734849599993" duration="9037000" />
       <workItem from="1734858845708" duration="24399000" />
       <workItem from="1734950217277" duration="5127000" />
-      <workItem from="1734960305945" duration="3802000" />
+      <workItem from="1734960305945" duration="4144000" />
     </task>
     <task id="LOCAL-00001" summary="restaurant_manager">
       <option name="closed" value="true" />

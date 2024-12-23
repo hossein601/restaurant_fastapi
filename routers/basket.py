@@ -42,6 +42,7 @@ def create_basket(actions: BasketCreateItem, db: Session = Depends(get_db),
             db.commit()
             db.refresh(basket_item)
             return basket_item
+
     elif  item.stock > 0 and item.max_amount > 0:
         basket_item = BasketItem(
             quantity=1,
@@ -52,6 +53,7 @@ def create_basket(actions: BasketCreateItem, db: Session = Depends(get_db),
         db.commit()
         db.refresh(basket_item)
         return basket_item
+
     else:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail="Item not available ")
@@ -79,6 +81,7 @@ def add_remove_item(actions: BasketCreateItem, db: Session = Depends(get_db),
             db.commit()
             db.refresh(basket_item)
             return basket_item
+
         else:
             basket_item.quantity =0
             db.commit()
@@ -91,6 +94,7 @@ def add_remove_item(actions: BasketCreateItem, db: Session = Depends(get_db),
             db.commit()
             db.refresh(basket_item)
             return basket_item
+        
         else:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="ّItem is more than max_amount")
 @basket_router.get("/baskets/", status_code=status.HTTP_200_OK, response_model=LimitOffsetPage[BasketResponse],
@@ -126,6 +130,7 @@ def delete_from_basket(delete:bool = None,item_id: int = None , db: Session = De
         db.query(BasketItem).filter(BasketItem.basket_id == user_basket.id,BasketItem.item_id == item_id).delete()
         db.commit()
         return {"message": " Item removed from basket"}
+
     elif delete:
         db.query(BasketItem).filter(BasketItem.basket_id == user_basket.id).delete()
         db.commit()

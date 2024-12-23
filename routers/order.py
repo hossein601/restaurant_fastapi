@@ -62,11 +62,9 @@ def decrease_item_quantity(mapper, connection, target):
     with Session(bind=connection) as session:
         item = session.query(Item).filter(Item.id == target.item_id).first()
         if not item or item.stock < target.quantity:
-            raise Exception(f"Not enough stock for item  {target.item_id}")
+            raise Exception(f"Not enough stock for item with  {target.item_id}")
         item.stock -= target.quantity
         session.commit()
-
-
 
 event.listen(OrderItem, 'after_insert', decrease_item_quantity)
 @order_router.get("/orders/", status_code=status.HTTP_200_OK, response_model=LimitOffsetPage[OrderGetResponsePaginate],dependencies=[Depends(role_checker(["user", "admin"]))])

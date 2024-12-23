@@ -21,7 +21,6 @@ def create_category(data: CategoryCreate, db: Session = Depends(get_db),
     category = Category(name=data.name, description=data.description)
     db.add(category)
     db.commit()
-
     db.refresh(category)
     return category
 
