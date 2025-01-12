@@ -30,7 +30,7 @@ $ uvicorn main:app
 usage:http://127.0.0.1:8000/docs
 
 ```
-## auth
+## Auth
 ```bash
 Create_User
 
@@ -47,6 +47,8 @@ access token
 
 ```
 ```bash
+Login
+
 POST/v1/login
 Header : guest_user_id
 Request body:requierd
@@ -57,8 +59,10 @@ Request body:requierd
 response
 access token
 ```
-## user
+## User
 ```bash
+Get_user
+
 GET/v1/users
 response
 {
