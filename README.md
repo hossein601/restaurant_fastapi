@@ -27,55 +27,13 @@ DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 
 ```bash
 $ uvicorn main:app
-usage:http://127.0.0.1:8000/docs
 
 ```
-## Auth
-```bash
-Create_User
-
-POST/v1/sigin
-default role is user
-Header : guest_user_id
-Request body:requierd
-{
-  "phone_number": "string",
-  "password": "string"
-}
-response
-access token
-
-```
-```bash
-Login
-
-POST/v1/login
-Header : guest_user_id
-Request body:requierd
-{
-  "phone_number": "string",
-  "password": "string"
-}
-response
-access token
-```
-## User
-```bash
-Get_user
-
-GET/v1/users
-response
-{
-  "name": "string",
-  "address": "string",
-  "phone_number": "string",
-  "wallet": 0,
-  "created_time": "2025-01-12T09:28:47.455Z",
-  "updated_time": "2025-01-12T09:28:47.455Z"
-},.....
+## Swagger
+### You can run one of the following commands for accessing apis:
+http://127.0.0.1{VARIABLE}:port_number/docs
 
 
-```
 ## Testing
 
 ``` bash
