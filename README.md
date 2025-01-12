@@ -17,6 +17,8 @@ pip install -r requirements.txt
 
 ```bash
 $ uvicorn main:app
+usage:http://127.0.0.1:8000/docs
+
 ```
 ## Usage
 First install database and create new database with your specific username and password
@@ -28,26 +30,14 @@ Create '.env' file write
 ```bash
 DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 ```
-## CLI
-```bash
->uvicorn main:app --reload
 
-usage:http://127.0.0.1:8000/docs
-options:
-auth,
-user,
-staff,
-item,
-category,
-category_item,
-basket,
-order
-
-```
 ## auth
 ```bash
+Create_User
+
 POST/v1/sigin
-role in [admin,user]
+default role is user
+Header : guest_user_id
 Request body:requierd
 {
   "phone_number": "string",
@@ -59,7 +49,7 @@ access token
 ```
 ```bash
 POST/v1/login
-role in [admin,user]
+Header : guest_user_id
 Request body:requierd
 {
   "phone_number": "string",
@@ -71,65 +61,17 @@ access token
 ## user
 ```bash
 GET/v1/users
-role in [admin,user]
 response
 {
   "name": "string",
   "address": "string",
   "phone_number": "string",
-  "wallet": 0
-}
-```
-```bash
-PUT/v1/users
-role in [admin,user]
-rquest
-{
-  "name": "string",
-  "address": "string"
-}
-response
-{
-  "name": "string",
-  "address": "string",
-  "phone_number": "string",
-  "wallet": 0
-}
-```
-```bash
-PUT/v1/users/increase wallet
-rquest
-{
-  "wallet": 0
-}
-response
-{
-  "wallet": 0
-}
-```
-```bash
-PUT/v1/users/decrease wallet
-role in [admin,user]
-rquest
-{
-  "wallet": 0
-}
-response
-{
-  "wallet": 0
-}
-```
-```bash
-PUT/v1/users/decrease wallet
-role in [admin,user]
-rquest
-{
-  "wallet": 0
-}
-response
-{
-  "wallet": 0
-}
+  "wallet": 0,
+  "created_time": "2025-01-12T09:28:47.455Z",
+  "updated_time": "2025-01-12T09:28:47.455Z"
+},.....
+
+
 ```
 ## Testing
 
