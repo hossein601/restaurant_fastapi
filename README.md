@@ -30,10 +30,10 @@ $ uvicorn main:app
 
 ```
 ## Swagger
-### You can run one of the following commands for accessing apis:
+#### You can run one of the following commands for accessing apis:
+```bash
 http://127.0.0.1{VARIABLE}:port_number/docs
-
-
+```
 ## Testing
 
 ``` bash
