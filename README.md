@@ -2,27 +2,14 @@
 ## **Restaurant Manager System**
 
 
-
 ## **Installation**
 
-First should install requirement.txt. Then create new database and add yoour database. create your own database.
+First should install requirement.txt.Then create new database and add your database. Create your own database.
 
 ### From source
 ```bash
 git clone https://github.com/hossein601/restaurant_fastapi.git
 cd restaurant
-pip install -e
-```
-```bash
-pip install psycopg2-binary
-pip install SQLAlchemy
-pip install python-dotenv
-pip install fastapi
-pip install alembic
-pip install JWT
-pip install bcrypt
-```
-```bash
 pip install -r requirements.txt
 ```
 ## Executing
@@ -31,19 +18,13 @@ pip install -r requirements.txt
 ```bash
 $ uvicorn main:app
 ```
-### from source
-```bash
-git clone https://github.com/hossein601/restaurant_fastapi.git
-cd restaurant
-pip install -e
-```
 ## Usage
-First install database and create new database with your specific username and password,add it to file 'base_model'
+First install database and create new database with your specific username and password
 ```bash
 sudo -u postgres psql
 sudo -u postgres createdb <dbname>
 ```
-Create '.env' file wirte 
+Create '.env' file write 
 ```bash
 DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 ```
