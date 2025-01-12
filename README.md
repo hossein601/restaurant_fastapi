@@ -18,7 +18,7 @@ First install database and create new database with your specific username and p
 sudo -u postgres psql
 sudo -u postgres createdb <dbname>
 ```
-Create '.env' file write 
+Create '.env' file write restaurant_fastapi
 ```bash
 DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 ```
@@ -30,7 +30,7 @@ $ uvicorn main:app
 
 ```
 ## Swagger
-#### You can run one of the following commands for accessing apis:
+#### You can run one of the following commands for access api:
 ```bash
 http://127.0.0.1 <port_number>/docs
 ```
