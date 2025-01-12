@@ -12,14 +12,6 @@ git clone https://github.com/hossein601/restaurant_fastapi.git
 cd restaurant
 pip install -r requirements.txt
 ```
-## Executing
-#### You can run one of the following commands for execution:
-
-```bash
-$ uvicorn main:app
-usage:http://127.0.0.1:8000/docs
-
-```
 ## Usage
 First install database and create new database with your specific username and password
 ```bash
@@ -30,7 +22,14 @@ Create '.env' file write
 ```bash
 DATABASE_URL=postgresql+psycopg2://postgres:<password>@localhost/<dbname>
 ```
+## Executing
+#### You can run one of the following commands for execution:
 
+```bash
+$ uvicorn main:app
+usage:http://127.0.0.1:8000/docs
+
+```
 ## auth
 ```bash
 Create_User
