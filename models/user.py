@@ -17,7 +17,7 @@ class User(TimeRecord, Base):
     name = Column(String, nullable=True)
     phone_number = Column(String, unique=True, nullable=False)
     wallet = Column(Integer, default=0)
-    role = Column(String, default=Role.user)
+    role = Column(String, default=Role.admin)
     hashed_password = Column(String, nullable=False)
     address = Column(String, nullable=True)
 

@@ -1,5 +1,6 @@
-from typing import List
-from pydantic import BaseModel,Field
+from typing import List, Any
+from pydantic import BaseModel, Field, model_validator
+from fastapi import HTTPException
 
 
 class ItemInCategory(BaseModel):
@@ -7,6 +8,24 @@ class ItemInCategory(BaseModel):
     name: str=Field(default=None, title="The name of the Category", max_length=30)
     price: int=Field(default= 0,le=10000,gt=0, description="The price must be greater than zero")
     stock: int=Field(default= 0,le=10000,gt=0, description="The stock must be greater than zero")
+
+    @model_validator(mode='before')
+    @classmethod
+    def validate_atts(cls, data: Any):
+        if isinstance(data, dict):
+            name = data.get('name')
+            description = data.get('price')
+            stock = data.get('stock')
+
+            if not isinstance(name, str) or len(name)>30 or len(name)<1:
+                raise HTTPException(status_code=400, detail="name should be string")
+
+            if not isinstance(description, str) or len(description)>30 or len(description)<1:
+                raise HTTPException(status_code=400, detail="description should be string")
+            if not isinstance(stock, int) or stock>10000 or stock<1:
+                raise HTTPException(status_code=400, detail="stock should be integer")
+        return data
+
 
     class Config:
         orm_mode = True
