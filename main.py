@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi_pagination import add_pagination
+
+from database.base import Base,engine
 from routers import category_item_router
 from routers.cateogry import category_router
 from routers.basket import basket_router
