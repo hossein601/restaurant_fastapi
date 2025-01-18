@@ -4,11 +4,10 @@ from fastapi_filter import FilterDepends
 from fastapi_pagination import paginate
 from sqlalchemy.orm import Session
 
-from dependencies import get_current_user, role_checker
+from dependencies import  role_checker
 from database.base import get_db
 from models import Category, CategoryItem
 from models.item import Item
-from models.user import User
 from schemas.filter import ItemFilter, FilterResponse
 from schemas.item import ItemCreate, ItemResponse, ItemUpdate
 from fastapi_pagination.limit_offset import  LimitOffsetPage
@@ -17,16 +16,15 @@ from sqlalchemy import select
 item_router = APIRouter()
 
 @item_router.post("/items", response_model=ItemResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(role_checker(["admin"]))])
-def create_item(item: ItemCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def create_item(item: ItemCreate, db: Session = Depends(get_db)):
     new_item = Item(**item.dict())
     db.add(new_item)
     db.commit()
     db.refresh(new_item)
-
     return new_item
 
 @item_router.put("/items/{item_id}", response_model=ItemResponse, status_code=status.HTTP_200_OK, dependencies=[Depends(role_checker(["admin"]))])
-def update_item(item_id: int, item_data: ItemUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def update_item(item_id: int, item_data: ItemUpdate, db: Session = Depends(get_db)):
     item = db.query(Item).get(item_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -37,17 +35,17 @@ def update_item(item_id: int, item_data: ItemUpdate, db: Session = Depends(get_d
     return item
 
 @item_router.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(role_checker(["admin"]))])
-def delete_item(item_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def delete_item(item_id: int, db: Session = Depends(get_db)):
     item = db.query(Item).filter(Item.id == item_id).first()
     db.delete(item)
     db.commit()
     return {"success": True}
 
-@item_router.get("/items",status_code = status.HTTP_200_OK,response_model=LimitOffsetPage[FilterResponse], dependencies=[Depends(role_checker(["admin","user"]))])
+@item_router.get("/items",status_code = status.HTTP_200_OK,response_model=LimitOffsetPage[FilterResponse])
 def filter_items(item_filter: ItemFilter = FilterDepends(ItemFilter),
                  category_id: int = None,
                  category_name : str = None,
-                 db:Session = Depends(get_db),current_user: User = Depends(get_current_user)):
+                 db:Session = Depends(get_db)):
 
     if item_filter.id or item_filter.price or item_filter.description :
         query = item_filter.filter(select(Item).join(CategoryItem).join(Category)).filter(Item.stock>0)
