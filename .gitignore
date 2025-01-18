@@ -12,4 +12,5 @@ __pycache__/
 *$py.class
 !**/migrations/**/__pycache__/
 !**/test/**/__pycache__/.idea
-.idea/
+.idea/.idea
+.coverage
